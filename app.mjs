@@ -6,6 +6,7 @@ import { createServer } from "http";
 import { GraphQLSchema } from "graphql";
 import socketServer from "./helpers/socket.mjs";
 import index from "./routes/index.mjs";
+import users from "./routes/users.mjs";
 import RootQueryType from "./types/Root.mjs";
 import RootMutationType from "./types/RootMutation.mjs";
 
@@ -35,6 +36,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/docs", index);
+app.use("/users", users);
 app.use(
   "/graphql",
   graphqlHTTP({

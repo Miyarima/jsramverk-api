@@ -1,7 +1,7 @@
 import { MongoClient } from "mongodb";
 import "dotenv/config";
 
-const databaseName = "wpp";
+const databaseName = "jsramverk";
 // const collectionName = "docs";
 
 const database = {
