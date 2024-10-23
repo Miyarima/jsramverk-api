@@ -14,6 +14,7 @@ const DocumentType = new GraphQLObjectType({
     _id: { type: new GraphQLNonNull(GraphQLString) },
     title: { type: new GraphQLNonNull(GraphQLString) },
     content: { type: new GraphQLNonNull(GraphQLString) },
+    creator: { type: new GraphQLNonNull(GraphQLString) },
     created_at: { type: new GraphQLNonNull(GraphQLString) },
   }),
 });

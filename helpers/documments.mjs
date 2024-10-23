@@ -4,9 +4,9 @@ import { ObjectId } from "mongodb";
 const collectionName = "docs";
 
 const docs = {
-  getDocs: async () => {
+  getDocs: async (creator) => {
     const db = await database.getDb("docs");
-    const documents = await db.collection.find().toArray();
+    const documents = await db.collection.find({ creator: creator }).toArray();
     await db.client.close();
 
     return documents;
@@ -20,12 +20,13 @@ const docs = {
 
     return document;
   },
-  addDoc: async (title, content) => {
+  addDoc: async (title, content, creator) => {
     const db = await database.getDb("docs");
 
     await db.collection.insertOne({
       title: title,
       content: content,
+      creator: creator,
       created_at: new Date(),
     });
 

@@ -24,7 +24,10 @@ const RootQueryType = new GraphQLObjectType({
     documents: {
       type: new GraphQLList(DocumentType),
       description: "A list of all documents",
-      resolve: async () => docs.getDocs(),
+      args: {
+        creator: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      resolve: async (parent, args) => docs.getDocs(args.creator),
     },
   }),
 });
