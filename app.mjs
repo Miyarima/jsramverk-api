@@ -8,6 +8,7 @@ import { applyMiddleware } from "graphql-middleware";
 import socketServer from "./helpers/socket.mjs";
 import index from "./routes/index.mjs";
 import users from "./routes/users.mjs";
+import token from "./routes/jwt.mjs";
 import RootQueryType from "./types/Root.mjs";
 import RootMutationType from "./types/RootMutation.mjs";
 import { checkJWTGraphql } from "./middlerware/checkJWT.mjs";
@@ -47,6 +48,7 @@ app.use((req, res, next) => {
 
 app.use("/docs", index);
 app.use("/users", users);
+app.use("/token", token);
 app.use(
   "/graphql",
   graphqlHTTP((req, res) => ({

@@ -16,12 +16,12 @@ export const checkJWTGraphql = (context) => {
   const token = context.req.headers["x-access-token"];
 
   if (!token) {
-    throw new Error("No token provided");
+    res.status(401).json({ msg: "Invalid or no token provided" });
   }
 
   try {
     jwt.verify(token, process.env.JWT_SECRET);
   } catch (err) {
-    throw new Error("Invalid token");
+    res.status(401).json({ msg: "Invalid or no token provided" });
   }
 };

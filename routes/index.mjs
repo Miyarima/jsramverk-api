@@ -34,7 +34,7 @@ router.get("/", checkJWT, async (req, res) => {
 });
 
 // Returns the document with the provided Id
-router.get("/:id", async (req, res) => {
+router.get("/:id", checkJWT, async (req, res) => {
   let db;
   try {
     db = await database.getDb("docs");
@@ -54,7 +54,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // Creates a document with the provided title and content
-router.post("/create", async (req, res) => {
+router.post("/create", checkJWT, async (req, res) => {
   let db;
   try {
     db = await database.getDb("docs");
@@ -78,7 +78,7 @@ router.post("/create", async (req, res) => {
 });
 
 // Updates the document with the given Id
-router.put("/update", async (req, res) => {
+router.put("/update", checkJWT, async (req, res) => {
   let db;
   try {
     db = await database.getDb("docs");

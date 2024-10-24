@@ -6,7 +6,11 @@ const collectionName = "docs";
 const docs = {
   getDocs: async (creator) => {
     const db = await database.getDb("docs");
-    const documents = await db.collection.find({ creator: creator }).toArray();
+    const documents = await db.collection
+      .find({
+        $or: [{ creator: creator }, { collaborators: creator }],
+      })
+      .toArray();
     await db.client.close();
 
     return documents;
