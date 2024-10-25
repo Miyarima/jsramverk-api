@@ -3,6 +3,7 @@ import database from "../db/database.mjs";
 import { ObjectId } from "mongodb";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { checkJWT } from "../middlerware/checkJWT.mjs";
 var router = express.Router();
 
 const handleError = (res, e) => {
@@ -135,6 +136,25 @@ router.post("/collaboration/login", async (req, res) => {
   } finally {
     await db.client.close();
   }
+});
+
+router.post("/codemode", checkJWT, async (req, res) => {
+  const encoded = {
+    code: btoa(req.body.code),
+  };
+
+  const response = await fetch("https://execjs.emilfolino.se/code", {
+    body: JSON.stringify(encoded),
+    headers: {
+      "content-type": "application/json",
+    },
+    method: "POST",
+  });
+
+  const resJson = await response.json();
+  const decoded = atob(resJson.data);
+
+  res.status(200).json({ res: decoded });
 });
 
 export default router;
