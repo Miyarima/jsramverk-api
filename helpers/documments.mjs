@@ -24,13 +24,14 @@ const docs = {
 
     return document;
   },
-  addDoc: async (title, content, creator) => {
+  addDoc: async (title, content, creator, code) => {
     const db = await database.getDb("docs");
 
     await db.collection.insertOne({
       title: title,
       content: content,
       creator: creator,
+      code: code,
       created_at: new Date(),
     });
 

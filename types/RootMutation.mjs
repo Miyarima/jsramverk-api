@@ -21,13 +21,15 @@ const RootMutationType = new GraphQLObjectType({
         title: { type: new GraphQLNonNull(GraphQLString) },
         content: { type: new GraphQLNonNull(GraphQLString) },
         creator: { type: new GraphQLNonNull(GraphQLString) },
+        code: { type: new GraphQLNonNull(GraphQLString) },
       },
       resolve: (parent, args) => {
-        docs.addDoc(args.title, args.content, args.creator);
+        docs.addDoc(args.title, args.content, args.creator, args.code);
         return {
           title: args.title,
           content: args.content,
           creator: args.creator,
+          code: args.code,
         };
       },
     },
