@@ -1,6 +1,7 @@
 import express from "express";
 import database from "../db/database.mjs";
 import { ObjectId } from "mongodb";
+import { checkJWT } from "../middlerware/checkJWT.mjs";
 var router = express.Router();
 
 const handleError = (res, e) => {
@@ -15,7 +16,7 @@ const handleError = (res, e) => {
 };
 
 // Returns all documents within the collection
-router.get("/", async (req, res) => {
+router.get("/", checkJWT, async (req, res) => {
   let db;
   try {
     db = await database.getDb("docs");
@@ -33,7 +34,7 @@ router.get("/", async (req, res) => {
 });
 
 // Returns the document with the provided Id
-router.get("/:id", async (req, res) => {
+router.get("/:id", checkJWT, async (req, res) => {
   let db;
   try {
     db = await database.getDb("docs");
@@ -53,7 +54,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // Creates a document with the provided title and content
-router.post("/create", async (req, res) => {
+router.post("/create", checkJWT, async (req, res) => {
   let db;
   try {
     db = await database.getDb("docs");
@@ -77,7 +78,7 @@ router.post("/create", async (req, res) => {
 });
 
 // Updates the document with the given Id
-router.put("/update", async (req, res) => {
+router.put("/update", checkJWT, async (req, res) => {
   let db;
   try {
     db = await database.getDb("docs");

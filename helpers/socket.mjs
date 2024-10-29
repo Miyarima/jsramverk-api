@@ -1,6 +1,7 @@
 import { Server } from "socket.io";
 import roomState from "./roomState.mjs";
 import comments from "./comments.mjs";
+import { email } from "./email.mjs";
 
 const socketServer = (httpServer) => {
   let timeout;
@@ -53,6 +54,11 @@ const socketServer = (httpServer) => {
       );
 
       socket.to(socket.currentRoom).emit("newComment", data);
+    });
+
+    socket.on("invite", (data) => {
+      console.log(data);
+      email.send(data.email, data.id, data.link);
     });
 
     socket.on("disconnect", async () => {

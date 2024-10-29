@@ -4,10 +4,14 @@ import cors from "cors";
 import morgan from "morgan";
 import { createServer } from "http";
 import { GraphQLSchema } from "graphql";
+import { applyMiddleware } from "graphql-middleware";
 import socketServer from "./helpers/socket.mjs";
 import index from "./routes/index.mjs";
+import users from "./routes/users.mjs";
+import token from "./routes/jwt.mjs";
 import RootQueryType from "./types/Root.mjs";
 import RootMutationType from "./types/RootMutation.mjs";
+import { checkJWTGraphql } from "./middlerware/checkJWT.mjs";
 
 const app = express();
 const httpServer = createServer(app);
@@ -18,6 +22,14 @@ const schema = new GraphQLSchema({
   query: RootQueryType,
   mutation: RootMutationType,
 });
+
+const loggingMiddleware = async (resolve, parent, args, context, info) => {
+  checkJWTGraphql(context);
+  const result = await resolve(parent, args, context, info);
+  return result;
+};
+
+const schemaWithMiddleware = applyMiddleware(schema, loggingMiddleware);
 
 socketServer(httpServer);
 
@@ -35,12 +47,15 @@ app.use((req, res, next) => {
 });
 
 app.use("/docs", index);
+app.use("/users", users);
+app.use("/token", token);
 app.use(
   "/graphql",
-  graphqlHTTP({
-    schema: schema,
+  graphqlHTTP((req, res) => ({
+    schema: schemaWithMiddleware,
     graphiql: true,
-  })
+    context: { req },
+  }))
 );
 
 app.get("/", async (req, res) => {
